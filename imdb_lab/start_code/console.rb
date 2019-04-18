@@ -33,6 +33,7 @@ casting4.save()
 
 #p Movie.all()
 #p movie2.stars()
-p star1.movies()
+#p star1.movies()
+p movie2.find_fees()
 # binding.pry
 # nil

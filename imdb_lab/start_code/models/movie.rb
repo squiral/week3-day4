@@ -3,12 +3,13 @@ require_relative("../db/sql_runner")
 class Movie
 
   attr_reader :id
-  attr_accessor :title, :genre
+  attr_accessor :title, :genre, :budget
 
   def initialize(options)
     @id = options['id'].to_i if options['id']
     @title = options['title']
     @genre = options['genre']
+    @budget = options['budget']
   end
 
   def save()
@@ -34,6 +35,19 @@ class Movie
     sql = "DELETE FROM movies WHERE id = $1;"
     values = [@id]
     SqlRunner.run(sql, values)
+  end
+
+  def find_fees()
+    sql = "SELECT fee FROM castings
+    INNER JOIN movies
+    ON movies.id = castings.movie_id
+    WHERE movies.id = $1"
+    values = [@id]
+    fees = SqlRunner.run(sql, values)
+    result = fees.map { |fee| fee }
+    fee_result = result.map { |fee_hash| fee_hash['fee'].to_i }
+    return fee_result
+
   end
 
   def stars()
